@@ -14,3 +14,8 @@ For AXIOS is used :-
 ```
 https://www.knowledgehut.com/blog/web-development/axios-in-react
 ```
+For react router dom
+
+```
+npm i react-router-dom
+```
