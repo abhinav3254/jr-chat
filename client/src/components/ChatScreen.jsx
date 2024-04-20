@@ -1,6 +1,46 @@
-import Contact from "./Contact"
+import { useState, useEffect } from "react";
+import Contact from "./Contact";
+
 
 const ChatScreen = () => {
+    const [ws, setWs] = useState(null);
+
+    const WEB_SOCKET_URL = "ws://localhost:8080/chat";
+
+    useEffect(() => {
+        connectToWebSocket();
+    }, [])
+
+
+    const connectToWebSocket = () => {
+        const token = localStorage.getItem('token');
+        const url = `${WEB_SOCKET_URL}?token=${encodeURIComponent(token)}`;
+
+        const ws = new WebSocket(url, ['Bearer', token]);
+
+        ws.onopen = (event) => {
+            console.log('WebSocket connected');
+        }
+
+        ws.onclose = (event) => {
+            console.log('WebSocket connection closed');
+        }
+
+        ws.onmessage = (event) => {
+            console.log('Received message:', event.data);
+        }
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        }
+
+        setWs(ws);
+    }
+
+
+
+
+
     return (
         <div>
             <div className="h-screen w-full flex">
