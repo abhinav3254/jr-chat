@@ -1,12 +1,37 @@
+import axios from "axios";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
+
+    const navigate = useNavigate();
 
     const [loginPage, setLoginPage] = useState(true);
 
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const register = async () => {
+        try {
+            const url = "http://localhost:8080/auth/register";
+            const response = await axios.post(url, { name, username, password });
+            console.log(response.data);
+        } catch (err) {
+            alert(err.response.data);
+        }
+    }
+
+    const login = async () => {
+        try {
+            const url = "http://localhost:8080/auth/login";
+            const response = await axios.post(url, { username, password });
+            localStorage.setItem("token", response.data);
+            navigate('/home');
+        } catch (err) {
+            alert(err.response.data);
+        }
+    }
 
     return (
         <div className="w-full h-screen flex justify-center items-center font-ubuntu">
@@ -32,7 +57,7 @@ const Auth = () => {
                         <input value={password} onChange={(e) => setPassword(e.target.value)} className="border-none outline-none px-2 py-1 w-full" type="password" placeholder="Password" />
                     </div>
                     <div className="flex flex-col items-center my-1 text-[10px]">
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-sm">Register</button>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-sm" onClick={register}>Register</button>
                         <p>Already have an account? <span className="text-blue-500 cursor-pointer my-2"
                             onClick={() => setLoginPage(true)}
                         >login</span> </p>
@@ -55,7 +80,7 @@ const Auth = () => {
                         <input value={password} onChange={(e) => setPassword(e.target.value)} className="border-none outline-none px-2 py-1 w-full" type="password" placeholder="Password" />
                     </div>
                     <div className="flex flex-col items-center my-1 text-[10px]">
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-sm">Register</button>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-sm" onClick={login}>Login</button>
                         <p>Don't have an account? <span className="text-blue-500 cursor-pointer my-2"
                             onClick={() => setLoginPage(false)}
                         >Signup</span> </p>
